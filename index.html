@@ -13,12 +13,16 @@
 
     <div class="container">
         <div class="current-weather-info">
+            <form id="location_input">
+                <input type="text" class="search" placeholder="Search location..." />
+                <button type="submit" class="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
             <div class="weather-info_city" id="city">Oradea</div>
             <div class="weather-info_date" id="date">Tuesday, 4th Apr</div>
             <div class="weather-info_time" id="time">1:40 <span id="am-pm">PM</span></div>
             <div class="weather-info_temp" id="temp">4&#176; C</div>
             <div class="weather-info_description" id="winfo">Light rain</div>
-            <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon" class="weather-info_icon">
+            <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon" class="weather-info_icon" id="icon">
         </div>
 
         <div class="current-weather-details" id="details">
@@ -46,19 +50,19 @@
         </div>
     </div>
     <div class="forecast" id="forecast">
-        <div class="weather-forecast">
+        <div class="weather-forecast" id="day1">
             <div class="day">Tuesday</div>
             <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon" class="forecast_icon">
             <div class="temp_day">4&#176; C</div>
             <div class="temp_night">2&#176; C</div>
         </div>
-        <div class="weather-forecast">
+        <div class="weather-forecast" id="day2">
             <div class="day">Wednesday</div>
             <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon" class="forecast_icon">
             <div class="temp_day">4&#176; C</div>
             <div class="temp_night">2&#176; C</div>
         </div>
-        <div class="weather-forecast">
+        <div class="weather-forecast" id="day3">
             <div class="day">Thursday</div>
             <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon" class="forecast_icon">
             <div class="temp_day">4&#176; C</div>
@@ -90,6 +94,7 @@
         </div>
     </div>
 
+    
     <script src="app.js"></script>
 </body>
 </html>
