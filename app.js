@@ -1,3 +1,4 @@
+// Getting all necessary elements
 const currentCity = document.getElementById('city');
 const currentDate = document.getElementById('date');
 const currentTime = document.getElementById('time');
@@ -12,6 +13,7 @@ const form = document.getElementById('location_input');
 const search = document.querySelector('.search');
 const submit = document.querySelector('.submit');
 
+// Default city when the page loads
 let cityInput = 'Oradea';
 
 
@@ -34,6 +36,7 @@ setInterval(() => {
     currentTime.innerHTML = `${militaryhours}:${minutes} <span id="am-pm">${ampm}</span>`;
     currentDate.innerHTML = `${days[day]}, ${date}  ${months[month]}`
 
+    // Changing background for night time
     if(hour < 8 || hour > 19)
     {
         document.getElementById('body').style.backgroundImage='url("https://images.unsplash.com/photo-1632446628687-127cf068a522?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80")'
@@ -41,11 +44,13 @@ setInterval(() => {
 },1000);
 
 
-//Adding submit event to the <form>
+//Adding submit event to the form
 form.addEventListener('submit', (e) =>{
+    // If it's empty throw an alert
     if(search.value.length == 0){
         alert('Please type in a city name');
     }
+    // Change default city to the one written in the input
     else{
         cityInput = search.value;
         WeatherData();
@@ -53,8 +58,10 @@ form.addEventListener('submit', (e) =>{
     }
     e.preventDefault();
 })
+
 WeatherData();
-// Getting data from the weather API
+
+// Function that fetches and displays data from the weather API
 function WeatherData () {
     fetch(`http://api.weatherapi.com/v1/forecast.json?key=${APIkey}&days=7&aqi=no&alerts=no&q=${cityInput}`).then(res=>res.json()).then(data =>{
         console.log(data)
@@ -68,7 +75,7 @@ function WeatherData () {
         currentHumidity.innerHTML = data.current.humidity +  ' %';
         currentWindSpeed.innerHTML = data.current.wind_kph + ' km/h';
 
-        //getting forecast data from API 
+        //Getting forecast data from API 
         forecast.innerHTML=''
         data.forecast.forecastday.forEach((day,idx)=>
         {
