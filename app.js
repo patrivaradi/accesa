@@ -17,28 +17,13 @@ const submit = document.querySelector('.submit');
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+function dayOfTheWeek(day, month){
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return days[new Date(`${day} ,${month}`).getDay()] +', '+ months[new Date(`${month} ,${day}`).getMonth()];
+}
+
 const APIkey = '111dd2e8dc614eaaa84143103230504';
-
-// Updating current date and time
-setInterval(() => {
-    const time = new Date();
-    const month = time.getMonth();
-    const date = time.getDate();
-    const day = time.getDay();
-    const hour = time.getHours();
-    const militaryhours = hour >= 13 ? hour %12 : hour;
-    const minutes = time.getMinutes();
-    const ampm = hour >=12 ? 'PM': 'AM';
-    
-    currentTime.innerHTML = `${militaryhours}:${minutes} <span id="am-pm">${ampm}</span>`;
-    currentDate.innerHTML = `${days[day]}, ${date}  ${months[month]}`
-
-    // Changing background for night time
-    if(hour < 8 || hour > 19)
-    {
-        document.getElementById('body').style.backgroundImage='url("https://images.unsplash.com/photo-1632446628687-127cf068a522?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80")'
-    }
-},1000);
 
 let cityInput='';
 //Adding submit event to the form
@@ -85,7 +70,25 @@ function WeatherData () {
             currentFeelsLike.innerHTML = data.current.feelslike_c + '&#176;' + ' C';
             currentHumidity.innerHTML = data.current.humidity +  ' %';
             currentWindSpeed.innerHTML = data.current.wind_kph + ' km/h';
+            
+            const date = data.location.localtime;
+            console.log(date);
+            const m = parseInt(date.substr(5,2));
+            const d = parseInt(date.substr(8,2));
+            const hour = date.substr(11,2);
+            const minute = date.substr(14);
+            const militaryhours = hour >= 13 ? hour %12 : hour;
+            const ampm = hour >=12 ? 'PM': 'AM';
 
+            currentTime.innerHTML = `${militaryhours}:${minute} <span id="am-pm">${ampm}</span>`;
+            currentDate.innerHTML = `${dayOfTheWeek(d , m )}  ${d}`;
+
+            // Changing background for night time
+            if(hour < 8 || hour > 19)
+            {
+                document.getElementById('body').style.backgroundImage='url("https://images.unsplash.com/photo-1632446628687-127cf068a522?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80")'
+            }
+            
             //Getting forecast data from API 
             forecast.innerHTML=''
             data.forecast.forecastday.forEach((day,idx)=>
