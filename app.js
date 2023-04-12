@@ -13,9 +13,6 @@ const form = document.getElementById('location_input');
 const search = document.querySelector('.search');
 const submit = document.querySelector('.submit');
 
-// Default city when the page loads
-let cityInput = 'Oradea';
-
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -43,7 +40,7 @@ setInterval(() => {
     }
 },1000);
 
-
+let cityInput='';
 //Adding submit event to the form
 form.addEventListener('submit', (e) =>{
     // If it's empty throw an alert
@@ -63,30 +60,45 @@ WeatherData();
 
 // Function that fetches and displays data from the weather API
 function WeatherData () {
-    fetch(`http://api.weatherapi.com/v1/forecast.json?key=${APIkey}&days=7&aqi=no&alerts=no&q=${cityInput}`).then(res=>res.json()).then(data =>{
-        console.log(data)
 
-        //Getting current weather data from API and changing it in html
-        currentCity.innerHTML = data.location.name;
-        currentTemp.innerHTML = data.current.temp_c + '&#176;' + ' C';
-        currentDesc.innerHTML = data.current.condition.text;
-        currentWeatherIcon.src = data.current.condition.icon;
-        currentFeelsLike.innerHTML = data.current.feelslike_c + '&#176;' + ' C';
-        currentHumidity.innerHTML = data.current.humidity +  ' %';
-        currentWindSpeed.innerHTML = data.current.wind_kph + ' km/h';
+    navigator.geolocation.getCurrentPosition((succes)=>{
+        //console.log(succes);
+        //Getting current location
+        var yourCity='';
+        let lat = succes.coords.latitude;
+        let lon = succes.coords.longitude;        
+        yourCity=lat+',' +lon;
 
-        //Getting forecast data from API 
-        forecast.innerHTML=''
-        data.forecast.forecastday.forEach((day,idx)=>
-        {
-            const epochDate=new Date(day.date_epoch *1000);
-            forecast.innerHTML += 
-            `<div class="weather-forecast">
-                <div class="day">${days[epochDate.getDay()]}</div>
-                <img src="${data.forecast.forecastday[idx].day.condition.icon}" alt="Weather icon" class="forecast_icon">
-                <div class="temp_day">${data.forecast.forecastday[idx].day.maxtemp_c}&#176; C</div>
-                <div class="temp_night">${data.forecast.forecastday[idx].day.mintemp_c}&#176; C</div>
-            </div>`
+        //If there was an input we will show weather for that city
+        if(!cityInput==0){
+            yourCity=cityInput;
+        } 
+        //fetching the weather API
+        fetch(`http://api.weatherapi.com/v1/forecast.json?key=${APIkey}&days=7&aqi=no&alerts=no&q=${yourCity}`).then(res=>res.json()).then(data =>{
+            console.log(data)
+            //yourCity='';
+            //Getting current weather data from API and changing it in html
+            currentCity.innerHTML = data.location.name;
+            currentTemp.innerHTML = data.current.temp_c + '&#176;' + ' C';
+            currentDesc.innerHTML = data.current.condition.text;
+            currentWeatherIcon.src = data.current.condition.icon;
+            currentFeelsLike.innerHTML = data.current.feelslike_c + '&#176;' + ' C';
+            currentHumidity.innerHTML = data.current.humidity +  ' %';
+            currentWindSpeed.innerHTML = data.current.wind_kph + ' km/h';
+
+            //Getting forecast data from API 
+            forecast.innerHTML=''
+            data.forecast.forecastday.forEach((day,idx)=>
+            {
+                const epochDate=new Date(day.date_epoch *1000);
+                forecast.innerHTML += 
+                `<div class="weather-forecast">
+                    <div class="day">${days[epochDate.getDay()]}</div>
+                    <img src="${data.forecast.forecastday[idx].day.condition.icon}" alt="Weather icon" class="forecast_icon">
+                    <div class="temp_day">${data.forecast.forecastday[idx].day.maxtemp_c}&#176; C</div>
+                    <div class="temp_night">${data.forecast.forecastday[idx].day.mintemp_c}&#176; C</div>
+                </div>`
+            })
         })
     })
 };
