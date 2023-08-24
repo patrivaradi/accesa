@@ -46,7 +46,7 @@ function dayOfTheWeek(day, month) {
     "Dec",
   ];
   return (
-    days[new Date(`${day} ,${month}`).getDay()] +
+    days[new Date(`${month} ,${day}`).getDay() - 2] +
     ", " +
     months[new Date(`${month} ,${day}`).getMonth()]
   );
@@ -104,7 +104,7 @@ function WeatherData() {
         currentWindSpeed.innerHTML = data.current.wind_kph + " km/h";
 
         const date = data.location.localtime;
-        console.log(date);
+        // console.log(date);
         const m = parseInt(date.substr(5, 2));
         const d = parseInt(date.substr(8, 2));
         const hour = date.substr(11, 2);
@@ -113,7 +113,7 @@ function WeatherData() {
         const ampm = hour >= 12 ? "PM" : "AM";
 
         currentTime.innerHTML = `${militaryhours}:${minute} <span id="am-pm">${ampm}</span>`;
-        currentDate.innerHTML = `${dayOfTheWeek(d, m)}  ${d}`;
+        currentDate.innerHTML = `${dayOfTheWeek(d, m)} ${d}`;
 
         // Changing background for night time
         if (hour < 8 || hour > 19) {
