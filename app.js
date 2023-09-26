@@ -88,7 +88,7 @@ function WeatherData() {
     }
     //fetching the weather API
     fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=${APIkey}&days=7&aqi=no&alerts=no&q=${yourCity}`
+      `https://api.weatherapi.com/v1/forecast.json?key=${APIkey}&days=7&aqi=no&alerts=no&q=${yourCity}`
     )
       .then((res) => res.json())
       .then((data) => {
